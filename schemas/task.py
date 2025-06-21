@@ -46,3 +46,7 @@ class TaskCreate(TaskBase):
     porque la estamos heredando de `TaskBase`
     '''
     pass
+
+
+class TaskUpdate(TaskBase):
+    pass
