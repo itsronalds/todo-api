@@ -4,6 +4,8 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Framework-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 
+---
+
 ## Descripción
 
 **ToDo API** es una API RESTful desarrollada con **FastAPI** que permite gestionar tareas de manera sencilla y eficiente. Su objetivo principal es proporcionar un backend robusto para aplicaciones de listas de tareas (to-do lists), permitiendo operaciones de creación, consulta y gestión de tareas mediante peticiones HTTP.
@@ -16,21 +18,33 @@
 - Validación de datos usando Pydantic.
 - Arquitectura modular para facilitar la escalabilidad y el mantenimiento.
 
-## Endpoints Principales
+## Alembic
 
-- `GET /tasks`: Obtiene la lista de todas las tareas.
-- `POST /tasks/create`: Crea una nueva tarea.
+1. **Instalar Alembic**
 
-## Estructura de la Base de Datos
+   ```bash
+   pip install alembic
+   ```
 
-La API utiliza SQLAlchemy para definir el modelo `Task`:
+2. **Inicializar Alembic**
 
-| Campo       | Tipo      | Descripción                             |
-|-------------|-----------|-----------------------------------------|
-| id          | Integer   | Identificador único (autogenerado)      |
-| title       | String    | Título de la tarea                      |
-| description | Text      | Descripción de la tarea (opcional)      |
-| created_at  | DateTime  | Fecha y hora de creación (autogenerada) |
+   ```bash
+   alembic init
+   ```
+
+   Ahora, debemos modificar el archivo `alembic/env.py` y agregarle la URL de nuestra conexión de base de datos. [Puedes leer más en este enlace](https://www.nashruddinamin.com/blog/how-to-use-alembic-for-database-migrations-in-your-fastapi-application)
+
+2. **Nuestro primer Revision: Generar tablas**
+
+   - Generar registro de cambio
+   ```bash
+   alembic revision --autogenerate -m "Nombre del cambio"
+   ```
+
+   - Aplicar cambios
+   ```bash
+   alembic upgrade head
+   ```
 
 ## Instalación
 
@@ -45,24 +59,21 @@ La API utiliza SQLAlchemy para definir el modelo `Task`:
 
    ```bash
    python -m venv venv
-   source venv/bin/activate  # En Windows usa: venv\Scripts\activate
+   # En Windows:
+   venv\Scripts\activate
+   # En Unix/Mac:
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
 3. **Configura la base de datos PostgreSQL:**
+   - Crea una base de datos (por ejemplo, `todo_db`).
+   - Configura las variables de entorno o el archivo `.env` con tus credenciales de conexión.
 
-   - Crea una base de datos llamada `todo_db`.
-   - Modifica la URL de conexión en `database/__init__.py` si es necesario:
-     ```
-     DATABASE_URL = 'postgresql+psycopg2://postgres:1234@localhost/todo_db'
-     ```
+4. **Ejecuta las migraciones con Alembic:**
 
-4. **Ejecuta las migraciones (si corresponde) o crea las tablas:**
-
-   ```python
-   # En consola interactiva de Python
-   from database import Base, engine
-   Base.metadata.create_all(bind=engine)
+   ```bash
+   alembic upgrade head
    ```
 
 5. **Inicia la aplicación:**
@@ -73,9 +84,10 @@ La API utiliza SQLAlchemy para definir el modelo `Task`:
 
 6. **Accede a la documentación interactiva:**
    - [Swagger UI](http://localhost:8000/docs)
-   - [ReDoc](http://localhost:8000/redoc)
 
-## Ejemplo de Uso
+---
+
+## Uso Básico de la API
 
 ### Crear una tarea
 
@@ -89,10 +101,37 @@ curl -X POST "http://localhost:8000/tasks/create" -H "Content-Type: application/
 curl -X GET "http://localhost:8000/tasks"
 ```
 
-## Tecnologías Utilizadas
+---
+
+## Migraciones con Alembic
+
+1. **Instalar Alembic**
+
+   ```bash
+   pip install alembic
+   ```
+
+2. **Generar una nueva migración:**
+
+   ```bash
+   alembic revision --autogenerate -m "Descripción del cambio"
+   ```
+
+3. **Aplicar migraciones:**
+
+   ```bash
+   alembic upgrade head
+   ```
+
+---
+
+## Tecnologías y Herramientas
 
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Pydantic](https://pydantic-docs.helpmanual.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Alembic](https://alembic.sqlalchemy.org/)
 - [Uvicorn](https://www.uvicorn.org/)
+- [Psycopg2](https://pypi.org/project/psycopg2/)
+- [JSON Web Token](https://pypi.org/project/jsonwebtoken/)
